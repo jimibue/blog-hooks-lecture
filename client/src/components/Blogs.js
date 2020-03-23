@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { List, Header, Segment } from "semantic-ui-react";
+import { List, Header, Segment, Button } from "semantic-ui-react";
+import BlogForm from "./BlogForm";
 
 const Blogs = props => {
   const [blogs, setBlogs] = useState([]);
-
+  const [showForm, setShowForm] = useState(false);
+  const addBlog = (blog) => setBlogs([ ...blogs, blog, ]);
   useEffect(() => {
     axios
       .get("/api/blogs")
@@ -29,6 +31,10 @@ const Blogs = props => {
     <>
       <Header as="h1">My Blogs</Header>
       <br />
+      { showForm &&  <BlogForm toggleForm={setShowForm} add={addBlog} /> }
+      <Button onClick={() => setShowForm(!showForm)}>
+        { showForm ? "Close Form" : "Show Form" }
+      </Button>
       <List>{renderBlogs()}</List>
     </>
   );
